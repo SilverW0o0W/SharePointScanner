@@ -42,10 +42,11 @@ namespace SharePointBrowser.SPObject
             return lists;
         }
 
-        public SPList GetListByUrl(string url)
+        public SPList GetListByName(string name)
         {
             SPList spList = null;
             Web msWeb = this.msObject as Web;
+            string url = string.Format("{0}/{1}", this.Url, name);
             List msList = msWeb.GetList(url);
             this.Load(msList);
             spList = new SPList(context, msList, this.Url);

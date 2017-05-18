@@ -51,6 +51,7 @@
     <Compile Include="SPBrowser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SPObject\ISPObject.cs" />
+    <Compile Include="SPObject\SPFile.cs" />
     <Compile Include="SPObject\SPFolder.cs" />
     <Compile Include="SPObject\SPList.cs" />
     <Compile Include="SPObject\SPObject.cs" />

@@ -9,9 +9,12 @@ namespace SharePointBrowser.SPObject
 {
     public class SPSite : SPObject
     {
+        private List<SPWeb> webs;
         public List<SPWeb> Webs { get { return GetWebs(); } }
+        private SPWeb rootWeb;
+        public SPWeb RootWeb { get { return GetRootWeb(); } }
 
-        public SPSite(ClientContext context) : base(context, context.ApplicationName)
+        public SPSite(ClientContext context) : base(context, string.Empty)
         {
             this.msObject = context.Site;
             Initialize();
@@ -31,18 +34,32 @@ namespace SharePointBrowser.SPObject
         //    Initialize();
         //}
 
-        private List<SPWeb> GetWebs()
+        private List<SPWeb> GetWebs(bool reload = true)
         {
-            List<SPWeb> spWebs = new List<SPWeb>();
+
+            webs = new List<SPWeb>();
             Site msSite = this.msObject as Site;
             WebCollection webCollection = msSite.RootWeb.Webs;
             this.Load(webCollection);
             foreach (Web msWeb in webCollection)
             {
                 SPWeb tempWeb = new SPWeb(this.context, msWeb, msSite.Url);
-                spWebs.Add(tempWeb);
+                webs.Add(tempWeb);
             }
-            return spWebs;
+            return webs;
+        }
+
+        private SPWeb GetRootWeb(bool reload = true)
+        {
+            if (!reload)
+            {
+                return rootWeb;
+            }
+            Site msSite = this.msObject as Site;
+            Web msWeb = msSite.RootWeb;
+            this.Load(msWeb);
+            rootWeb = new SPWeb(this.context, msWeb, this.Url);
+            return rootWeb;
         }
 
         public SPWeb GetWebById(Guid id)
