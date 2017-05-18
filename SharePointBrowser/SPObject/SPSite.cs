@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SharePointBrowser.SPObject
 {
-    internal class SPSite : SPObject
+    public class SPSite : SPObject
     {
         public List<SPWeb> Webs { get { return GetWebs(); } }
 
@@ -22,7 +22,7 @@ namespace SharePointBrowser.SPObject
             this.Load(this.msObject);
             Site msSite = this.msObject as Site;
             this.Id = msSite.Id;
-            this.Url = msSite.Url;
+            this.Url = msSite.ServerRelativeUrl;
             this.DisplayName = this.Url;
         }
 

@@ -7,17 +7,54 @@ using Microsoft.SharePoint.Client;
 
 namespace SharePointBrowser.SPObject
 {
-    class SPFolder : SPObject
+    public class SPFolder : SPObject
     {
-        private Folder msFolder;
+        private List<SPFolder> folders;
+        private List<SPFile> files;
+        public List<SPFolder> Folders { get { return GetFolders(); } }
+        public List<SPFile> Files { get { return GetFiles(); } }
 
-        public SPFolder(ClientContext context, Folder msFolder, string parentUrl) : base(context, parentUrl)
+        public SPFolder(ClientContext context, Folder msFolder, string parentUrl) : base(context, msFolder, parentUrl)
         {
-            this.context = context;
-            this.msObject = msFolder;
             this.Id = new Guid();
             this.DisplayName = msFolder.Name;
-            this.Url = string.Format("{0}/{1}", parentUrl, this.DisplayName);
+            this.Url = msFolder.ServerRelativeUrl;
+        }
+
+        private List<SPFolder> GetFolders(bool reload = true)
+        {
+            if (!reload)
+            {
+                return folders;
+            }
+            folders = new List<SPFolder>();
+            Folder msFolder = this.msObject as Folder;
+            FolderCollection folderCollection = msFolder.Folders;
+            this.Load(folderCollection);
+            foreach (Folder msChildFolder in folderCollection)
+            {
+                SPFolder tempFolder = new SPFolder(this.context, msChildFolder, this.Url);
+                folders.Add(tempFolder);
+            }
+            return folders;
+        }
+
+        private List<SPFile> GetFiles(bool reload = true)
+        {
+            if (!reload)
+            {
+                return files;
+            }
+            files = new List<SPFile>();
+            Folder msFolder = this.msObject as Folder;
+            FileCollection fileCollection = msFolder.Files;
+            this.Load(fileCollection);
+            foreach (File msChildFile in fileCollection)
+            {
+                SPFile tempFile = new SPFile(this.context, msChildFile, this.Url);
+                files.Add(tempFile);
+            }
+            return files;
         }
     }
 }

@@ -54,9 +54,10 @@ namespace SharePointBrowser
         {
             SPSite spSite = new SPSite(context);
 
-            spSite.GetWebById(new Guid());
+            //spSite.GetWebById(new Guid());
             //List<SPWeb> spWebs = spSite.Webs;
             //SPList spList = spWebs[0].Lists[0];
+            List<SPFolder> folders = spSite.Webs[0].Lists[0].Folders;
             List<string> itemNames = new List<string>();
             Web web = context.Web;
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SharePointBrowser.SPObject
 {
-    internal abstract class SPObject : ISPObject
+    public abstract class SPObject : ISPObject
     {
         protected ClientContext context;
         //protected List<SPObject> children;
@@ -19,9 +19,16 @@ namespace SharePointBrowser.SPObject
         public string Url { get; protected set; }
         public string ParentUrl;
 
-        public SPObject(ClientContext context,string parentUrl)
+        public SPObject(ClientContext context, string parentUrl)
         {
             this.context = context;
+            this.ParentUrl = parentUrl;
+        }
+
+        public SPObject(ClientContext context, ClientObject msObject, string parentUrl)
+        {
+            this.context = context;
+            this.msObject = msObject;
             this.ParentUrl = parentUrl;
         }
 

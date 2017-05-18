@@ -4,14 +4,12 @@ using System.Collections.Generic;
 
 namespace SharePointBrowser.SPObject
 {
-    internal class SPList : SPObject
+    public class SPList : SPObject
     {
         public List<SPFolder> Folders { get { return GetFolders(); } }
 
-        public SPList(ClientContext context, List msList, string parentUrl) : base(context, parentUrl)
+        public SPList(ClientContext context, List msList, string parentUrl) : base(context, msList, parentUrl)
         {
-            this.context = context;
-            this.msObject = msList;
             this.Id = msList.Id;
             this.DisplayName = msList.Title;
             this.Url = string.Format("{0}/{1}", parentUrl, this.DisplayName);

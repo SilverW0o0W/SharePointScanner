@@ -7,15 +7,15 @@ using Microsoft.SharePoint.Client;
 
 namespace SharePointBrowser.SPObject
 {
-    internal class SPWeb : SPObject
+    public class SPWeb : SPObject
     {
+        private List<SPList> lists;
         public List<SPList> Lists { get { return GetLists(); } }
 
-        public SPWeb(ClientContext context, Web msWeb, string parentUrl) : base(context, parentUrl)
+        public SPWeb(ClientContext context, Web msWeb, string parentUrl) : base(context, msWeb, parentUrl)
         {
-            this.msObject = msWeb;
             this.DisplayName = msWeb.Title;
-            this.Url = msWeb.Url;
+            this.Url = msWeb.ServerRelativeUrl;
             this.Id = msWeb.Id;
         }
 
@@ -24,15 +24,19 @@ namespace SharePointBrowser.SPObject
 
         //}
 
-        private List<SPList> GetLists()
+        private List<SPList> GetLists(bool reload = true)
         {
-            List<SPList> lists = new List<SPList>();
+            if (!reload)
+            {
+                return lists;
+            }
+            lists = new List<SPList>();
             Web msWeb = this.msObject as Web;
             ListCollection listCollection = msWeb.Lists;
             this.Load(listCollection);
-            foreach (List list in listCollection)
+            foreach (List msList in listCollection)
             {
-                SPList tempList = new SPList(this.context, list, msWeb.Url);
+                SPList tempList = new SPList(this.context, msList, msWeb.Url);
                 lists.Add(tempList);
             }
             return lists;

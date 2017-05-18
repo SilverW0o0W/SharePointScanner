@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SharePointBrowser.SPObject
 {
-    internal interface ISPObject
+    public interface ISPObject
     {
         //void Load();
         //ISPObject Parent { get; }
