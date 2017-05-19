@@ -50,6 +50,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Logger\LoggerManager.csproj">
+      <Project>{857FB22D-ACA9-4605-89FB-C8B9F15C0A8E}</Project>
+      <Name>LoggerManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharePointBrowser\SharePointBrowser.csproj">
       <Project>{BA990823-1D3E-493B-BD4D-F125A021E0B8}</Project>
       <Name>SharePointBrowser</Name>

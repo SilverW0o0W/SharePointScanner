@@ -13,62 +13,66 @@ namespace LoggerManager
             ERROR
         }
 
+
+        private string callingPath = System.Reflection.Assembly.GetCallingAssembly().Location;
+        public Guid Id { get; private set; }
+        public LogLevel OutputLevel { get; private set; }
         public string LogPath { get; private set; }
         public string LogFileName { get; private set; }
-        public string LogFullName { get; private set; }
+        public string FullName { get; private set; }
 
-        public Logger()
+        public Logger(LogLevel level = LogLevel.INFO)
         {
-            LogFileName = "log.log";
-            LogPath = GetDirectoryPath(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            GenerateFullName();
+            Id = Guid.NewGuid();
+            OutputLevel = level;
+            FullName = GenerateFullName();
         }
 
-        public Logger(string logFileName)
+        public Logger(string fullName, LogLevel level = LogLevel.INFO)
         {
-            LogFileName = logFileName;
-            LogPath = GetDirectoryPath(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            GenerateFullName();
+            Id = Guid.NewGuid();
+            OutputLevel = level;
+            FullName = fullName;
         }
 
-        public Logger(string logFileName, string logPath)
+        public Logger(string fileName, bool isFullName, LogLevel level = LogLevel.INFO)
         {
-            LogFileName = logFileName;
-            if (CheckPath(logPath))
+            Id = Guid.NewGuid();
+            OutputLevel = level;
+            if (isFullName)
             {
-                LogPath = logPath;
+                FullName = fileName;
             }
             else
             {
-                LogPath = GetDirectoryPath(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                FullName = callingPath + fileName;
             }
-            GenerateFullName();
         }
 
-        public bool SetLogPath(string path)
-        {
-            bool result = false;
-            if (!CheckPath(path))
-            {
-                return false;
-            }
-            if (string.IsNullOrEmpty(LogPath))
-            {
-                LogPath = path;
-                GenerateFullName();
-                result = true;
-            }
-            else
-            {
-                lock (LogPath)
-                {
-                    ResetLogPath(path);
-                }
-                GenerateFullName();
-                result = true;
-            }
-            return result;
-        }
+        //public bool SetLogPath(string path)
+        //{
+        //    bool result = false;
+        //    if (!CheckPath(path))
+        //    {
+        //        return false;
+        //    }
+        //    if (string.IsNullOrEmpty(LogPath))
+        //    {
+        //        LogPath = path;
+        //        //GenerateFullName();
+        //        result = true;
+        //    }
+        //    else
+        //    {
+        //        lock (LogPath)
+        //        {
+        //            ResetLogPath(path);
+        //        }
+        //        //GenerateFullName();
+        //        result = true;
+        //    }
+        //    return result;
+        //}
 
         private bool CheckPath(string path)
         {
@@ -97,11 +101,11 @@ namespace LoggerManager
             return result;
         }
 
-        private void ResetLogPath(string path)
-        {
-            this.Log(LogLevel.WARNING, "The log path is changed.New path: {0}.", path);
-            LogPath = path;
-        }
+        //private void ResetLogPath(string path)
+        //{
+        //    this.Log(LogLevel.WARNING, "The log path is changed.New path: {0}.", path);
+        //    LogPath = path;
+        //}
 
         private string GetDirectoryPath(string path)
         {
@@ -109,15 +113,33 @@ namespace LoggerManager
             return info.Parent.FullName;
         }
 
-        private void GenerateFullName()
+        private void GenerateFullName(string fileName)
         {
-            this.LogFullName = LogPath + Path.DirectorySeparatorChar + LogFileName;
+            this.FullName = LogPath + Path.DirectorySeparatorChar + fileName;
         }
 
+        private string GenerateFullName()
+        {
+            string fileName;
+            FileInfo info = new FileInfo(callingPath);
+            fileName = string.Format("{0}.log", callingPath);
+            return fileName;
+        }
+
+        public void ChangeOutputLevel(LogLevel level)
+        {
+            if (this.OutputLevel != level)
+            {
+                this.Warning("Change log level. Current level: {0}. New level: {1}.", this.OutputLevel, level);
+                this.OutputLevel = level;
+            }
+        }
+
+        #region output log
         public void Log(LogLevel level, string format, params object[] args)
         {
             string message = string.Format("{0} {1} :{2}", level.ToString(), DateTime.Now.ToString("MM-dd HH:mm:ss,fff"), string.Format(format, args));
-            using (StreamWriter writer = new StreamWriter(LogFullName, true))
+            using (StreamWriter writer = new StreamWriter(FullName, true))
             {
                 writer.WriteLine(message);
             }
@@ -142,5 +164,6 @@ namespace LoggerManager
         {
             this.Log(LogLevel.ERROR, format, args);
         }
+        #endregion output log
     }
 }

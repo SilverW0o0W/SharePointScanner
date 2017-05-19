@@ -14,7 +14,7 @@ namespace SharePointBrowser
 {
     public class SPBrowser
     {
-        private static Logger log = new Logger("SPBrowser.log");
+        private static Logger log = LoggerFactory.GetInstance();
         private ClientContext context;
         ExceptionHandlingScope scope;
         private string originUrl;
