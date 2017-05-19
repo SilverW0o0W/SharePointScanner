@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharePointBrowser.SPObject
+namespace SharePointBrowser.SharePointObject
 {
     public class SPSite : SPObject
     {
@@ -14,7 +14,7 @@ namespace SharePointBrowser.SPObject
         private SPWeb rootWeb;
         public SPWeb RootWeb { get { return GetRootWeb(); } }
 
-        public SPSite(ClientContext context) : base(context, string.Empty)
+        public SPSite(ClientContext context) : base(context, ObjectLevel.Site, string.Empty)
         {
             this.msObject = context.Site;
             Initialize();

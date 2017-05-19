@@ -6,8 +6,16 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharePointBrowser.SPObject
+namespace SharePointBrowser.SharePointObject
 {
+    public enum ObjectLevel
+    {
+        Site,
+        Web,
+        Library,
+        Folder,
+        File
+    }
     public abstract class SPObject : ISPObject
     {
         protected ClientContext context;
@@ -17,17 +25,20 @@ namespace SharePointBrowser.SPObject
         public string DisplayName { get; protected set; }
         public Guid Id { get; protected set; }
         public string Url { get; protected set; }
-        public string ParentUrl;
+        public string ParentUrl { get; private set; }
+        public ObjectLevel Level { get; private set; }
 
-        public SPObject(ClientContext context, string parentUrl)
+        public SPObject(ClientContext context, ObjectLevel level, string parentUrl)
         {
             this.context = context;
+            this.Level = level;
             this.ParentUrl = parentUrl;
         }
 
-        public SPObject(ClientContext context, ClientObject msObject, string parentUrl)
+        public SPObject(ClientContext context, ObjectLevel level, ClientObject msObject, string parentUrl)
         {
             this.context = context;
+            this.Level = level;
             this.msObject = msObject;
             this.ParentUrl = parentUrl;
         }

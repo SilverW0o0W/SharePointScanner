@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.SharePoint.Client;
 
-namespace SharePointBrowser.SPObject
+namespace SharePointBrowser.SharePointObject
 {
     public class SPWeb : SPObject
     {
         private List<SPList> lists;
         public List<SPList> Lists { get { return GetLists(); } }
 
-        public SPWeb(ClientContext context, Web msWeb, string parentUrl) : base(context, msWeb, parentUrl)
+        public SPWeb(ClientContext context, Web msWeb, string parentUrl) : base(context, ObjectLevel.Web, msWeb, parentUrl)
         {
             this.DisplayName = msWeb.Title;
             this.Url = msWeb.ServerRelativeUrl;

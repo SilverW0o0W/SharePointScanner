@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.SharePoint.Client;
 
-namespace SharePointBrowser.SPObject
+namespace SharePointBrowser.SharePointObject
 {
     public class SPFolder : SPObject
     {
@@ -14,7 +14,7 @@ namespace SharePointBrowser.SPObject
         public List<SPFolder> Folders { get { return GetFolders(); } }
         public List<SPFile> Files { get { return GetFiles(); } }
 
-        public SPFolder(ClientContext context, Folder msFolder, string parentUrl) : base(context, msFolder, parentUrl)
+        public SPFolder(ClientContext context, Folder msFolder, string parentUrl) : base(context, ObjectLevel.Folder, msFolder, parentUrl)
         {
             this.Id = new Guid();
             this.DisplayName = msFolder.Name;

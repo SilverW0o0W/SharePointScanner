@@ -2,7 +2,7 @@
 using Microsoft.SharePoint.Client;
 using System.Collections.Generic;
 
-namespace SharePointBrowser.SPObject
+namespace SharePointBrowser.SharePointObject
 {
     public class SPList : SPObject
     {
@@ -11,7 +11,7 @@ namespace SharePointBrowser.SPObject
         private SPFolder rootFolder;
         public SPFolder RootFolder { get { return GetRootFolder(); } }
 
-        public SPList(ClientContext context, List msList, string parentUrl) : base(context, msList, parentUrl)
+        public SPList(ClientContext context, List msList, string parentUrl) : base(context, ObjectLevel.Library, msList, parentUrl)
         {
             this.Id = msList.Id;
             this.DisplayName = msList.Title;
