@@ -1,4 +1,5 @@
-﻿using SharePointBrowser;
+﻿using LoggerManager;
+using SharePointBrowser;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,16 +21,10 @@ namespace SharePointScannerCMD
         {
             string userName = string.Empty, password = string.Empty;
             string siteUrl = string.Empty;
-            SPBrowser browser = new SPBrowser(userName, password, siteUrl);
-            browser.Load();
-            List<string> items = browser.Load();
-            using (TextWriter writer = new StreamWriter(@"D:\data.txt"))
-            {
-                foreach (string item in items)
-                {
-                    writer.WriteLine(item);
-                }
-            }
+            //SPBrowser browser = new SPBrowser(userName, password);
+            Logger log = LoggerFactory.GetInstance(@"D:\test.log",LogLevel.DEBUG);
+            log.Info("Start");
+            log.Debug("Test");
         }
     }
 }

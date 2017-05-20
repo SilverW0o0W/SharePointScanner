@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using SharePointBrowser.SharePointObject;
 using System.IO;
 using System.Xml;
+using LoggerManager;
 
 namespace SharePointBrowser
 {
-    public class SPUtil
+    public class SPItemImporter
     {
         public enum FileType
         {
@@ -17,8 +18,15 @@ namespace SharePointBrowser
             XML
         }
 
-        private static TextWriter writer;
-        public static bool Import(List<SPObject> spObjects, string filePath, FileType type)
+        private Logger log;
+        private TextWriter writer;
+
+        public SPItemImporter(Logger log)
+        {
+            this.log = log;
+        }
+
+        public bool Import(List<SPObject> spObjects, string filePath, FileType type)
         {
             bool result = false;
             using (writer = new StreamWriter(filePath, false, Encoding.UTF8))
@@ -39,7 +47,7 @@ namespace SharePointBrowser
             return result;
         }
 
-        private static bool ImportTxt(List<SPObject> spObjects)
+        private bool ImportTxt(List<SPObject> spObjects)
         {
             bool result = false;
             try
@@ -60,7 +68,7 @@ namespace SharePointBrowser
             return result;
         }
 
-        private static bool ImportXml(List<SPObject> spObjects)
+        private bool ImportXml(List<SPObject> spObjects)
         {
             bool result = false;
             try

@@ -3,22 +3,18 @@ using System.IO;
 
 namespace LoggerManager
 {
+    public enum LogLevel
+    {
+        DEBUG,
+        INFO,
+        WARNING,
+        ERROR
+    }
     public class Logger
     {
-        public enum LogLevel
-        {
-            DEBUG,
-            INFO,
-            WARNING,
-            ERROR
-        }
-
-
-        private string callingPath = System.Reflection.Assembly.GetCallingAssembly().Location;
+        private string callingPath = System.Reflection.Assembly.GetEntryAssembly().Location;
         public Guid Id { get; private set; }
         public LogLevel OutputLevel { get; private set; }
-        public string LogPath { get; private set; }
-        public string LogFileName { get; private set; }
         public string FullName { get; private set; }
 
         public Logger(LogLevel level = LogLevel.INFO)
@@ -32,6 +28,10 @@ namespace LoggerManager
         {
             Id = Guid.NewGuid();
             OutputLevel = level;
+            if (string.IsNullOrEmpty(fullName))
+            {
+                fullName = GenerateFullName();
+            }
             FullName = fullName;
         }
 
@@ -45,7 +45,7 @@ namespace LoggerManager
             }
             else
             {
-                FullName = callingPath + fileName;
+                FullName = GenerateFullName(fileName);
             }
         }
 
@@ -113,17 +113,19 @@ namespace LoggerManager
             return info.Parent.FullName;
         }
 
-        private void GenerateFullName(string fileName)
+        public string GenerateFullName(string fileName = null)
         {
-            this.FullName = LogPath + Path.DirectorySeparatorChar + fileName;
-        }
-
-        private string GenerateFullName()
-        {
-            string fileName;
+            string fullName;
             FileInfo info = new FileInfo(callingPath);
-            fileName = string.Format("{0}.log", callingPath);
-            return fileName;
+            if (string.IsNullOrEmpty(fileName))
+            {
+                fullName = string.Format("{0}.log", callingPath);
+            }
+            else
+            {
+                fullName = string.Format("{0}{1}{2}", info.DirectoryName, Path.DirectorySeparatorChar, fileName);
+            }
+            return fullName;
         }
 
         public void ChangeOutputLevel(LogLevel level)
@@ -138,6 +140,10 @@ namespace LoggerManager
         #region output log
         public void Log(LogLevel level, string format, params object[] args)
         {
+            if (level < this.OutputLevel)
+            {
+                return;
+            }
             string message = string.Format("{0} {1} :{2}", level.ToString(), DateTime.Now.ToString("MM-dd HH:mm:ss,fff"), string.Format(format, args));
             using (StreamWriter writer = new StreamWriter(FullName, true))
             {

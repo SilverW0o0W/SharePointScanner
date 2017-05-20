@@ -8,15 +8,16 @@ using System.Security;
 using SharePointBrowser.SharePointObject;
 using System.Linq.Expressions;
 using LoggerManager;
-using static SharePointBrowser.SPUtil;
+using static SharePointBrowser.SPItemImporter;
 
 namespace SharePointBrowser
 {
     public class SPBrowser
     {
-        private static Logger log = LoggerFactory.GetInstance();
+        private static Logger log = LoggerFactory.GetInstance(LogLevel.DEBUG);
         private ClientContext context;
         ExceptionHandlingScope scope;
+        private SPItemImporter importer;
         private string originUrl;
         private string userName;
         private SecureString password;
@@ -28,6 +29,7 @@ namespace SharePointBrowser
         {
             this.userName = userName;
             this.password = GetPassword(password);
+            this.importer = new SPItemImporter(log);
         }
 
         public SPBrowser(string userName, string password, string importFilePath, FileType type)
@@ -36,6 +38,7 @@ namespace SharePointBrowser
             this.password = GetPassword(password);
             this.ImportFilePath = importFilePath;
             this.ImportFileType = type;
+            this.importer = new SPItemImporter(log);
         }
 
         public bool Initialize(string url)
@@ -59,7 +62,7 @@ namespace SharePointBrowser
         {
             SPSite spSite = new SPSite(context);
             List<SPObject> objects = spSite.RootWeb.Lists.ConvertAll(new Converter<SPObject, SPObject>(ConvertToInfo));
-            SPUtil.Import(objects, this.ImportFilePath, this.ImportFileType);
+            importer.Import(objects, this.ImportFilePath, this.ImportFileType);
         }
 
         private SecureString GetPassword(string password)

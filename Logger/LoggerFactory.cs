@@ -22,10 +22,6 @@ namespace LoggerManager
             if (CheckLogPath(logPath))
             {
                 log = GetInstance(logPaths[logPath]);
-                if (log.OutputLevel != level)
-                {
-                    log.ChangeOutputLevel(level);
-                }
             }
             else
             {
