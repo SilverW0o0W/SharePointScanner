@@ -11,5 +11,9 @@ namespace SharePointBrowser.SharePointObject
             this.DisplayName = msFile.Title;
             this.Url = msFile.ServerRelativeUrl;
         }
+
+        public override void ReloadChild()
+        {
+        }
     }
 }

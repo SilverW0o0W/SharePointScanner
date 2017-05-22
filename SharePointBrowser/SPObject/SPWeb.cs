@@ -28,6 +28,10 @@ namespace SharePointBrowser.SharePointObject
         {
             if (!reload)
             {
+                reload = lists == null;
+            }
+            if (!reload)
+            {
                 return lists;
             }
             lists = new List<SPList>();
@@ -51,6 +55,11 @@ namespace SharePointBrowser.SharePointObject
             this.Load(msList);
             spList = new SPList(context, msList, this.Url);
             return spList;
+        }
+
+        public override void ReloadChild()
+        {
+            lists = null;
         }
     }
 }

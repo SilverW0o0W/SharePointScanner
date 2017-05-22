@@ -57,6 +57,12 @@ namespace SharePointBrowser.SharePointObject
             context.Load(clientObject, retrievals);
             context.ExecuteQuery();
         }
+
+        public void Reload()
+        {
+            throw new NotImplementedException();
+        }
+        public abstract void ReloadChild();
     }
 
     internal class SPObjectInformation

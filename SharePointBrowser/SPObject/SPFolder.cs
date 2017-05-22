@@ -25,6 +25,10 @@ namespace SharePointBrowser.SharePointObject
         {
             if (!reload)
             {
+                reload = folders == null;
+            }
+            if (!reload)
+            {
                 return folders;
             }
             folders = new List<SPFolder>();
@@ -43,6 +47,10 @@ namespace SharePointBrowser.SharePointObject
         {
             if (!reload)
             {
+                reload = files == null;
+            }
+            if (!reload)
+            {
                 return files;
             }
             files = new List<SPFile>();
@@ -55,6 +63,12 @@ namespace SharePointBrowser.SharePointObject
                 files.Add(tempFile);
             }
             return files;
+        }
+
+        public override void ReloadChild()
+        {
+            files = null;
+            folders = null;
         }
     }
 }

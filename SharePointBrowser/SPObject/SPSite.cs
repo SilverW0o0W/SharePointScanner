@@ -36,7 +36,14 @@ namespace SharePointBrowser.SharePointObject
 
         private List<SPWeb> GetWebs(bool reload = true)
         {
-
+            if (!reload)
+            {
+                reload = webs == null;
+            }
+            if (!reload)
+            {
+                return webs;
+            }
             webs = new List<SPWeb>();
             Site msSite = this.msObject as Site;
             WebCollection webCollection = msSite.RootWeb.Webs;
@@ -51,6 +58,10 @@ namespace SharePointBrowser.SharePointObject
 
         private SPWeb GetRootWeb(bool reload = true)
         {
+            if (!reload)
+            {
+                reload = rootWeb == null;
+            }
             if (!reload)
             {
                 return rootWeb;
@@ -69,6 +80,12 @@ namespace SharePointBrowser.SharePointObject
             this.Load(msWeb);
             SPWeb spWeb = new SPWeb(context, msWeb, this.Url);
             return spWeb;
+        }
+
+        public override void ReloadChild()
+        {
+            rootWeb = null;
+            webs = null;
         }
     }
 }

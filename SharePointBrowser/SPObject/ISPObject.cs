@@ -8,7 +8,8 @@ namespace SharePointBrowser.SharePointObject
 {
     public interface ISPObject
     {
-        //void Load();
+        void Reload();
+        void ReloadChild();
         //ISPObject Parent { get; }
     }
 }

@@ -8,37 +8,37 @@ using System.Security;
 using SharePointBrowser.SharePointObject;
 using System.Linq.Expressions;
 using LoggerManager;
-using static SharePointBrowser.SPItemImporter;
+using static SharePointBrowser.SPItemExporter;
 
 namespace SharePointBrowser
 {
     public class SPBrowser
     {
-        private static Logger log = LoggerFactory.GetInstance(LogLevel.DEBUG);
+        private Logger log = LoggerFactory.GetInstance(LogLevel.DEBUG);
         private ClientContext context;
         ExceptionHandlingScope scope;
-        private SPItemImporter importer;
+        private SPItemExporter exporter;
         private string originUrl;
         private string userName;
         private SecureString password;
 
-        public string ImportFilePath { get; set; }
-        public FileType ImportFileType { get; set; }
+        public string ExportFilePath { get; set; }
+        public FileType ExportFileType { get; set; }
 
         public SPBrowser(string userName, string password)
         {
             this.userName = userName;
             this.password = GetPassword(password);
-            this.importer = new SPItemImporter(log);
+            this.exporter = new SPItemExporter(log);
         }
 
-        public SPBrowser(string userName, string password, string importFilePath, FileType type)
+        public SPBrowser(string userName, string password, string exportFilePath, FileType type)
         {
             this.userName = userName;
             this.password = GetPassword(password);
-            this.ImportFilePath = importFilePath;
-            this.ImportFileType = type;
-            this.importer = new SPItemImporter(log);
+            this.ExportFilePath = exportFilePath;
+            this.ExportFileType = type;
+            this.exporter = new SPItemExporter(log);
         }
 
         public bool Initialize(string url)
@@ -52,17 +52,18 @@ namespace SharePointBrowser
                 context.Credentials = new SharePointOnlineCredentials(userName, password);
                 isSuccess = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                log.Error("Initialize browser failed. Reason: {0}.", ex.ToString());
                 isSuccess = false;
             }
             return isSuccess;
         }
-        public void Import()
+        public void Export()
         {
             SPSite spSite = new SPSite(context);
             List<SPObject> objects = spSite.RootWeb.Lists.ConvertAll(new Converter<SPObject, SPObject>(ConvertToInfo));
-            importer.Import(objects, this.ImportFilePath, this.ImportFileType);
+            exporter.Export(objects, this.ExportFilePath, this.ExportFileType);
         }
 
         private SecureString GetPassword(string password)

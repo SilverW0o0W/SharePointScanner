@@ -22,6 +22,10 @@ namespace SharePointBrowser.SharePointObject
         {
             if (!reload)
             {
+                reload = folders == null;
+            }
+            if (!reload)
+            {
                 return folders;
             }
             folders = new List<SPFolder>();
@@ -83,6 +87,10 @@ namespace SharePointBrowser.SharePointObject
         {
             if (!reload)
             {
+                reload = rootFolder == null;
+            }
+            if (!reload)
+            {
                 return rootFolder;
             }
             try
@@ -97,6 +105,12 @@ namespace SharePointBrowser.SharePointObject
                 rootFolder = null;
             }
             return rootFolder;
+        }
+
+        public override void ReloadChild()
+        {
+            rootFolder = null;
+            folders = null;
         }
     }
 }

@@ -10,7 +10,7 @@ using LoggerManager;
 
 namespace SharePointBrowser
 {
-    public class SPItemImporter
+    public class SPItemExporter
     {
         public enum FileType
         {
@@ -21,23 +21,25 @@ namespace SharePointBrowser
         private Logger log;
         private TextWriter writer;
 
-        public SPItemImporter(Logger log)
+        public SPItemExporter(Logger log)
         {
             this.log = log;
         }
 
-        public bool Import(List<SPObject> spObjects, string filePath, FileType type)
+        public bool Export(List<SPObject> spObjects, string filePath, FileType type)
         {
             bool result = false;
+
+            log.Info("Start to import ");
             using (writer = new StreamWriter(filePath, false, Encoding.UTF8))
             {
                 switch (type)
                 {
                     case FileType.TXT:
-                        result = ImportTxt(spObjects);
+                        result = ExportTxt(spObjects);
                         break;
                     case FileType.XML:
-                        result = ImportXml(spObjects);
+                        result = ExportXml(spObjects);
                         break;
                     default:
                         result = false;
@@ -47,7 +49,7 @@ namespace SharePointBrowser
             return result;
         }
 
-        private bool ImportTxt(List<SPObject> spObjects)
+        private bool ExportTxt(List<SPObject> spObjects)
         {
             bool result = false;
             try
@@ -68,7 +70,7 @@ namespace SharePointBrowser
             return result;
         }
 
-        private bool ImportXml(List<SPObject> spObjects)
+        private bool ExportXml(List<SPObject> spObjects)
         {
             bool result = false;
             try
