@@ -21,10 +21,8 @@ namespace SharePointScannerCMD
         {
             string userName = string.Empty, password = string.Empty;
             string siteUrl = string.Empty;
-            //SPBrowser browser = new SPBrowser(userName, password);
-            Logger log = LoggerFactory.GetInstance(@"D:\test.log",LogLevel.DEBUG);
-            log.Info("Start");
-            log.Debug("Test");
+            SPBrowser browser = new SPBrowser(userName, password);
+            browser.Export();
         }
     }
 }
