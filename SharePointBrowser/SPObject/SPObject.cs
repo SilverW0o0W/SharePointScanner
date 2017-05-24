@@ -60,8 +60,12 @@ namespace SharePointBrowser.SharePointObject
 
         public void Reload()
         {
-            throw new NotImplementedException();
+            this.Load(this.msObject);
+            ReloadChild();
         }
+
+        protected abstract void ReloadName();
+
         public abstract void ReloadChild();
     }
 

@@ -87,5 +87,11 @@ namespace SharePointBrowser.SharePointObject
             rootWeb = null;
             webs = null;
         }
+
+        protected override void ReloadName()
+        {
+            Site msSite = this.msObject as Site;
+            this.DisplayName = msSite.Url;
+        }
     }
 }

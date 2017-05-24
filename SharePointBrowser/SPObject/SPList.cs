@@ -112,5 +112,11 @@ namespace SharePointBrowser.SharePointObject
             rootFolder = null;
             folders = null;
         }
+
+        protected override void ReloadName()
+        {
+            List msList = this.msObject as List;
+            this.DisplayName = msList.Title;
+        }
     }
 }

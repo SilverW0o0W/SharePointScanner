@@ -61,5 +61,11 @@ namespace SharePointBrowser.SharePointObject
         {
             lists = null;
         }
+
+        protected override void ReloadName()
+        {
+            Web web = this.msObject as Web;
+            this.DisplayName = web.Title;
+        }
     }
 }

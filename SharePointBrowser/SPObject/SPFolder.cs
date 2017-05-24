@@ -70,5 +70,11 @@ namespace SharePointBrowser.SharePointObject
             files = null;
             folders = null;
         }
+
+        protected override void ReloadName()
+        {
+            Folder msFolder = this.msObject as Folder;
+            this.DisplayName = msFolder.Name;
+        }
     }
 }

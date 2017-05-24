@@ -15,5 +15,11 @@ namespace SharePointBrowser.SharePointObject
         public override void ReloadChild()
         {
         }
+
+        protected override void ReloadName()
+        {
+            File msFile = this.msObject as File;
+            this.DisplayName = msFile.Title;
+        }
     }
 }
