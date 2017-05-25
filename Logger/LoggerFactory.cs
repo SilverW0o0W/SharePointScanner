@@ -5,12 +5,14 @@ namespace LoggerManager
 {
     public class LoggerFactory
     {
+        private static string callingPath = System.Reflection.Assembly.GetEntryAssembly().Location;
         private static Dictionary<Guid, Logger> cacheLoggers = new Dictionary<Guid, Logger>();
         private static Dictionary<string, Guid> logPaths = new Dictionary<string, Guid>();
 
         public static Logger GetInstance(LogLevel level = LogLevel.INFO)
         {
-            return GetInstance(string.Empty, level);
+            string callingFileName = string.Format("{0}.log", callingPath);
+            return GetInstance(callingFileName, level);
         }
 
         public static Logger GetInstance(string logPath, LogLevel level = LogLevel.INFO)
@@ -23,8 +25,15 @@ namespace LoggerManager
             else
             {
                 log = new Logger(logPath, level);
-                cacheLoggers.Add(log.Id, log);
-                logPaths.Add(log.FullName, log.Id);
+                if (!cacheLoggers.ContainsKey(log.Id) && !logPaths.ContainsKey(log.FullName))
+                {
+                    cacheLoggers.Add(log.Id, log);
+                    logPaths.Add(log.FullName, log.Id);
+                }
+                else
+                {
+                    throw new InvalidOperationException("New logger has same value in cache.");
+                }
             }
             return log;
         }

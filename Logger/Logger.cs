@@ -49,31 +49,6 @@ namespace LoggerManager
             }
         }
 
-        //public bool SetLogPath(string path)
-        //{
-        //    bool result = false;
-        //    if (!CheckPath(path))
-        //    {
-        //        return false;
-        //    }
-        //    if (string.IsNullOrEmpty(LogPath))
-        //    {
-        //        LogPath = path;
-        //        //GenerateFullName();
-        //        result = true;
-        //    }
-        //    else
-        //    {
-        //        lock (LogPath)
-        //        {
-        //            ResetLogPath(path);
-        //        }
-        //        //GenerateFullName();
-        //        result = true;
-        //    }
-        //    return result;
-        //}
-
         private bool CheckPath(string path)
         {
             bool result = false;
@@ -100,12 +75,6 @@ namespace LoggerManager
             }
             return result;
         }
-
-        //private void ResetLogPath(string path)
-        //{
-        //    this.Log(LogLevel.WARNING, "The log path is changed.New path: {0}.", path);
-        //    LogPath = path;
-        //}
 
         private string GetDirectoryPath(string path)
         {

@@ -22,6 +22,7 @@ namespace SharePointScannerCMD
             string userName = string.Empty, password = string.Empty;
             string siteUrl = string.Empty;
             SPBrowser browser = new SPBrowser(userName, password);
+            browser.Initialize(string.Empty);
             browser.Export();
         }
     }
