@@ -66,6 +66,36 @@ namespace SharePointBrowser
             exporter.Export(objects, this.ExportFilePath, this.ExportFileType);
         }
 
+        public List<SPObject> Load(string url, ObjectLevel level)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<SPObject> Load(SPObject spObject, ObjectLevel level)
+        {
+            List<SPObject> childObjects = null;
+            switch (level)
+            {
+                case ObjectLevel.Site:
+                    SPSite spSite = spObject as SPSite;
+                    childObjects = spSite.Webs.ConvertAll(new Converter<SPObject, SPObject>(ConvertToInfo));
+                    break;
+                case ObjectLevel.Web:
+                    SPWeb spWeb = spObject as SPWeb;
+                    childObjects = spWeb.Lists.ConvertAll(new Converter<SPObject, SPObject>(ConvertToInfo));
+                    break;
+                case ObjectLevel.Library:
+                    break;
+                case ObjectLevel.Folder:
+                    break;
+                case ObjectLevel.File:
+                    break;
+                default:
+                    break;
+            }
+            return childObjects;
+        }
+
         private SecureString GetPassword(string password)
         {
             SecureString ss = new SecureString();

@@ -58,7 +58,7 @@
     <Compile Include="SPObject\SPObject.cs" />
     <Compile Include="SPObject\SPSite.cs" />
     <Compile Include="SPObject\SPWeb.cs" />
-    <Compile Include="SPItemImporter.cs" />
+    <Compile Include="SPItemExporter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Logger\LoggerManager.csproj">
