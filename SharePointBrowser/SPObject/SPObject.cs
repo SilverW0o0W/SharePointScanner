@@ -16,6 +16,16 @@ namespace SharePointBrowser.SharePointObject
         Folder,
         File
     }
+
+    public enum NodeLevel
+    {
+        Site,
+        Web,
+        Library,
+        Folder,
+        FolderContent,
+        File
+    }
     public abstract class SPObject : ISPObject
     {
         protected ClientContext context;

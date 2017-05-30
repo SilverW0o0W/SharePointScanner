@@ -66,29 +66,37 @@ namespace SharePointBrowser
             exporter.Export(objects, this.ExportFilePath, this.ExportFileType);
         }
 
-        public List<SPObject> Load(string url, ObjectLevel level)
+        public List<SPObject> Load(string url, NodeLevel level)
         {
             throw new NotImplementedException();
         }
 
-        public List<SPObject> Load(SPObject spObject, ObjectLevel level)
+        public List<SPObject> Load(SPObject spObject, NodeLevel level)
         {
             List<SPObject> childObjects = null;
             switch (level)
             {
-                case ObjectLevel.Site:
+                case NodeLevel.Site:
                     SPSite spSite = spObject as SPSite;
                     childObjects = spSite.Webs.ConvertAll(new Converter<SPObject, SPObject>(ConvertToInfo));
                     break;
-                case ObjectLevel.Web:
+                case NodeLevel.Web:
                     SPWeb spWeb = spObject as SPWeb;
                     childObjects = spWeb.Lists.ConvertAll(new Converter<SPObject, SPObject>(ConvertToInfo));
                     break;
-                case ObjectLevel.Library:
+                case NodeLevel.Library:
+                    SPList spList = spObject as SPList;
+                    childObjects = spList.Folders.ConvertAll(new Converter<SPObject, SPObject>(ConvertToInfo));
                     break;
-                case ObjectLevel.Folder:
+                case NodeLevel.Folder:
+                    SPFolder spFolder = spObject as SPFolder;
+                    childObjects = spFolder.Folders.ConvertAll(new Converter<SPObject, SPObject>(ConvertToInfo));
                     break;
-                case ObjectLevel.File:
+                case NodeLevel.FolderContent:
+                    spFolder = spObject as SPFolder;
+                    childObjects = spFolder.Files.ConvertAll(new Converter<SPObject, SPObject>(ConvertToInfo));
+                    break;
+                case NodeLevel.File:
                     break;
                 default:
                     break;
