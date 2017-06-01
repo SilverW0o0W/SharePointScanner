@@ -22,6 +22,9 @@ namespace SharePointBrowser
         private string userName;
         private SecureString password;
 
+        SPSite spSite;
+        SPWeb spWeb;
+
         public string ExportFilePath { get; set; }
         public FileType ExportFileType { get; set; }
 
@@ -50,6 +53,7 @@ namespace SharePointBrowser
                 context = new ClientContext(url);
                 scope = new ExceptionHandlingScope(context);
                 context.Credentials = new SharePointOnlineCredentials(userName, password);
+                spSite = new SPSite(context);
                 isSuccess = true;
             }
             catch (Exception ex)
